@@ -21,6 +21,27 @@
 
     <hr>
 
+    <a href="./stock_order_new.html">納品書を作成する</a>
+
+    <hr>
+
+    <div id="products">
+      <div class="col-md-3"></div>
+      <div id="beer_500ml" class="col-md-3">
+        <img src="./kirin_beer_500ml.jpg" width="120" height="120">
+      </div>
+      <div id="lagar_500ml" class="col-md-3">
+        <img src="./kirin_lager_500ml.jpg" width="120" height="120">
+      </div>
+      <div id="tanrei_500ml" class="col-md-3">
+        <img src="./kirin_tanrei_500ml.jpg" width="120" height="120">
+      </div>
+    </div>
+
+    <div id="products-rows">
+
+    </div>
+
   </div>
 
   <div class="footer products">
@@ -30,6 +51,52 @@
       <a href="./stock_order.html">工場向け</a>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $(function(){
+      var url  = "https://fierce-sea-5268.herokuapp.com/all_orders";
+      var rows = $('#products-rows');
+
+      var toStringWithSign = function(number){
+        if(0 == number){
+          return 0;
+        }else if(0 < number){
+          return "+" + number.toString();
+        }else{
+          return "-" + number.toString();
+        };
+      };
+
+      var template = function(order){
+        var temp = "";
+        var date = moment(order.created_at);
+
+        temp += "<div>";
+        temp += "<div class='col-md-3'>";
+        temp += date.format("MM/DD hh:mm Z");
+        temp += "</div>";
+        temp += "<div class='col-md-3'>";
+        temp += toStringWithSign(order.items[0].quantity);
+        temp += "</div>";
+        temp += "<div class='col-md-3'>";
+        temp += toStringWithSign(order.items[1].quantity);
+        temp += "</div>";
+        temp += "<div class='col-md-3'>";
+        temp += toStringWithSign(order.items[2].quantity);
+        temp += "</div>";
+        temp += "</div>";
+
+        return temp;
+      };
+
+      $.get(url, function(data){
+        data.orders.forEach(function(order){
+          rows.append(template(order));
+        });
+      });
+
+    });
+  </script>
 
 </body>
 </html>
