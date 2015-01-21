@@ -24,19 +24,19 @@
     <div id="products">
       <div id="beer_500ml" class="col-md-4">
         <img src="./kirin_beer_500ml.jpg" width="120" height="120">
-        <input type="number" value="0">
+        <input type="number" name="product_1" value="0">
       </div>
       <div id="lagar_500ml" class="col-md-4">
         <img src="./kirin_lager_500ml.jpg" width="120" height="120">
-        <input type="number" value="0">
+        <input type="number" name="product_2" value="0">
       </div>
       <div id="tanrei_500ml" class="col-md-4">
         <img src="./kirin_tanrei_500ml.jpg" width="120" height="120">
-        <input type="number" value="0">
+        <input type="number" name="product_3" value="0">
       </div>
     </div>
 
-    <div class="btn btn-default btn-large">
+    <div id="submit" class="btn btn-default btn-large">
       注文する
     </div>
 
@@ -49,6 +49,42 @@
       <a href="./stock_order.html">工場向け</a>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $(function(){
+
+      var url    = "https://fierce-sea-5268.herokuapp.com/create_stock_orders.json";
+      var item1  = $('input[name=product_1]');
+      var item2  = $('input[name=product_2]');
+      var item3  = $('input[name=product_3]');
+      var button = $('#submit');
+
+      button.click(function(e){
+        if(confirm("確定します。よろしいですか？")){
+          var data = {
+            order: {
+              orderer_name: "ohataken",
+              items: [
+                { product_id: 1, quantity: parseInt(item1.val()) },
+                { product_id: 2, quantity: parseInt(item2.val()) },
+                { product_id: 3, quantity: parseInt(item3.val()) },
+              ]
+            }
+          };
+
+          $.ajax({
+            url:      url,
+            data:     data,
+            type:     "GET",
+            success: function(d){
+              console.log(d);
+              location.assign("stock_order.html");
+            },
+          });
+        };
+      });
+    });
+  </script>
 
 </body>
 </html>
