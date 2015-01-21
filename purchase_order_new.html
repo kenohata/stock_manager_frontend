@@ -50,5 +50,41 @@
     </div>
   </div>
 
+  <script type="text/javascript">
+    $(function(){
+
+      var url    = "https://fierce-sea-5268.herokuapp.com/create_purchase_orders.json";
+      var item1  = $('input[name=product_1]');
+      var item2  = $('input[name=product_2]');
+      var item3  = $('input[name=product_3]');
+      var button = $('#submit');
+
+      button.click(function(e){
+        if(confirm("確定します。よろしいですか？")){
+          var data = {
+            order: {
+              orderer_name: "ohataken",
+              items: [
+                { product_id: 1, quantity: parseInt(item1.val()) },
+                { product_id: 2, quantity: parseInt(item2.val()) },
+                { product_id: 3, quantity: parseInt(item3.val()) },
+              ]
+            }
+          };
+
+          $.ajax({
+            url:      url,
+            data:     data,
+            type:     "GET",
+            success: function(d){
+              console.log(d);
+              location.assign("purchase_order.html");
+            },
+          });
+        };
+      });
+    });
+  </script>
+
 </body>
 </html>
